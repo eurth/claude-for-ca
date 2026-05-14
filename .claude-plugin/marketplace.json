@@ -1,0 +1,112 @@
+{
+  "id": "claude-for-ca",
+  "name": "Claude for CA",
+  "description": "Claude Code plugins for Indian Chartered Accountant firms — GST compliance, income tax, TDS/TCS, audit, MCA/secretarial, transfer pricing, FEMA, payroll, advisory, client onboarding, CA student hub, and firm management. Includes offline memory bank and financial integrity guardrails with Human-in-the-Loop checkpoints.",
+  "version": "1.0.0",
+  "author": "EurthTech",
+  "designPartner": "CogentDeFi",
+  "mentor": "CA Butchi Babu, Gorantla Associates",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/eurthtech/claude-for-ca",
+  "tags": ["accounting", "gst", "income-tax", "tds", "audit", "india", "ca", "compliance", "transfer-pricing", "fema", "payroll", "mca"],
+  "plugins": [
+    {
+      "id": "claude-for-ca-core",
+      "path": "shared",
+      "description": "Core plugin: offline memory bank (SQLite), financial integrity guardrails (HITL hooks), audit trail, and compliance calendar monitors. Required by all domain plugins.",
+      "required": true,
+      "dependencies": []
+    },
+    {
+      "id": "claude-for-ca-cold-start",
+      "path": "cold-start",
+      "description": "One-time firm onboarding + client registration. Writes firm profile, partner details, client registry to local SQLite.",
+      "runFirst": true,
+      "dependencies": ["claude-for-ca-core"]
+    },
+    {
+      "id": "claude-for-ca-document-intake",
+      "path": "document-intake",
+      "description": "Email invoice fetch, PDF data extraction, bank statement processing, Tally import builder.",
+      "dependencies": ["claude-for-ca-core"]
+    },
+    {
+      "id": "claude-for-ca-gst",
+      "path": "gst-compliance",
+      "description": "GSTR-1, GSTR-3B, ITC reconciliation, GST notice triage, GSTR-9/9C annual return, GST audit (Sec 65/66).",
+      "dependencies": ["claude-for-ca-core"]
+    },
+    {
+      "id": "claude-for-ca-income-tax",
+      "path": "income-tax",
+      "description": "ITR review, IT notice analysis, advance tax, capital gains, Form 3CD tax audit, search & survey.",
+      "dependencies": ["claude-for-ca-core"]
+    },
+    {
+      "id": "claude-for-ca-tds",
+      "path": "tds-compliance",
+      "description": "TDS default check, 26AS reconciliation, Form 16/16A generator, 24Q/26Q quarterly return review.",
+      "dependencies": ["claude-for-ca-core"]
+    },
+    {
+      "id": "claude-for-ca-audit",
+      "path": "audit",
+      "description": "CARO 2020 (21 clauses), SA-315 risk matrix, bank audit & LFAR, workpapers, internal audit.",
+      "dependencies": ["claude-for-ca-core"]
+    },
+    {
+      "id": "claude-for-ca-mca",
+      "path": "mca-secretarial",
+      "description": "ROC filing tracker (AOC-4, MGT-7, DPT-3), board resolutions, annual compliance, charge registry.",
+      "dependencies": ["claude-for-ca-core"]
+    },
+    {
+      "id": "claude-for-ca-tp",
+      "path": "transfer-pricing",
+      "description": "Form 3CEB (all 25+ paragraphs), TP documentation (Rule 10D), FAR analysis, benchmarking study.",
+      "dependencies": ["claude-for-ca-core"]
+    },
+    {
+      "id": "claude-for-ca-fema",
+      "path": "fema-compliance",
+      "description": "FDI compliance (FC-GPR, FC-TRS, FEMA 20R, FLA return), ODI compliance (APR annual return).",
+      "dependencies": ["claude-for-ca-core"]
+    },
+    {
+      "id": "claude-for-ca-payroll",
+      "path": "payroll-compliance",
+      "description": "PF ECR generation, ESIC half-yearly return, state-wise Professional Tax (KA, MH, TN, AP, WB, GJ).",
+      "dependencies": ["claude-for-ca-core"]
+    },
+    {
+      "id": "claude-for-ca-advisory",
+      "path": "advisory-ca",
+      "description": "Tax planning (old vs new regime, 80C-80U), MSME advisory (Udyam, 43B(h), MSME Samadhaan).",
+      "dependencies": ["claude-for-ca-core"]
+    },
+    {
+      "id": "claude-for-ca-onboarding",
+      "path": "client-onboarding",
+      "description": "KYC checklist (individual/company/LLP), SA-210 engagement letters, PMLA CDD compliance.",
+      "dependencies": ["claude-for-ca-core"]
+    },
+    {
+      "id": "claude-for-ca-student",
+      "path": "ca-student",
+      "description": "Articleship diary (ICAI area-wise hours tracker), CA exam preparation (Foundation/Inter/Final).",
+      "dependencies": []
+    },
+    {
+      "id": "claude-for-ca-firm-mgmt",
+      "path": "firm-management",
+      "description": "Fee tracker, outstanding invoice aging, collection reminders, monthly practice review.",
+      "dependencies": ["claude-for-ca-core"]
+    },
+    {
+      "id": "claude-for-ca-builder-hub",
+      "path": "ca-builder-hub",
+      "description": "Plugin discovery and navigation. Entry point for users who don't know which skill to use.",
+      "dependencies": []
+    }
+  ]
+}

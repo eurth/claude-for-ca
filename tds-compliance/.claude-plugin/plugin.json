@@ -1,0 +1,21 @@
+{
+  "id": "claude-for-ca-tds",
+  "name": "TDS/TCS Compliance — Claude for CA",
+  "version": "1.0.0",
+  "description": "Complete TDS and TCS compliance assistant for Indian CA firms. Covers default detection, 26AS reconciliation, Form 16/16A generation, and quarterly return (24Q/26Q) review.",
+  "author": "EurthTech | Mentored by CA Butchi Babu, Gorantla Associates",
+  "tags": ["tds", "tcs", "india", "compliance", "ca", "form16"],
+  "dependencies": ["claude-for-ca-core"],
+  "userConfig": {
+    "default_tan": {
+      "description": "Default TAN for the firm's main client or the firm itself",
+      "type": "string",
+      "default": ""
+    },
+    "traces_portal": {
+      "description": "TRACES portal URL",
+      "type": "string",
+      "default": "https://www.tdscpc.gov.in"
+    }
+  }
+}

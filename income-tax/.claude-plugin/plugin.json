@@ -1,0 +1,21 @@
+{
+  "id": "claude-for-ca-income-tax",
+  "name": "Income Tax — Claude for CA",
+  "version": "1.0.0",
+  "description": "Complete income tax compliance assistant for Indian CA firms. Covers ITR review, notice analysis, advance tax, capital gains, and Form 3CD tax audit.",
+  "author": "EurthTech | Mentored by CA Butchi Babu, Gorantla Associates",
+  "tags": ["income-tax", "itr", "india", "compliance", "ca"],
+  "dependencies": ["claude-for-ca-core"],
+  "userConfig": {
+    "default_ay": {
+      "description": "Default Assessment Year (e.g. 2026-27)",
+      "type": "string",
+      "default": ""
+    },
+    "efiling_portal": {
+      "description": "Income Tax e-filing portal URL",
+      "type": "string",
+      "default": "https://eportal.incometax.gov.in"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "id": "claude-for-ca-core",
+  "name": "Claude for CA — Core",
+  "description": "Offline memory bank (SQLite), financial integrity guardrails with HITL hooks, append-only audit trail, and compliance calendar monitors. Required by all other claude-for-ca plugins.",
+  "version": "0.1.0",
+  "author": "EurthTech",
+  "license": "Apache-2.0",
+  "userConfig": [
+    {
+      "key": "firm_name",
+      "label": "CA Firm Name",
+      "description": "Full registered name of the CA firm (e.g. Gorantla Associates)",
+      "required": true
+    },
+    {
+      "key": "ca_name",
+      "label": "Principal CA Name",
+      "description": "Name of the partner or proprietor (e.g. CA Butchi Babu)",
+      "required": true
+    },
+    {
+      "key": "firm_gstin",
+      "label": "Firm GSTIN",
+      "description": "GSTIN of the CA firm itself (15-character alphanumeric)",
+      "required": true
+    },
+    {
+      "key": "jurisdiction",
+      "label": "Primary Jurisdiction",
+      "description": "State or city where the firm primarily operates (e.g. Andhra Pradesh)",
+      "required": true
+    },
+    {
+      "key": "tally_dsn",
+      "label": "Tally ODBC DSN Name",
+      "description": "Windows ODBC data source name for Tally ERP (e.g. TallyODBC64_9000). Leave blank if not using Tally.",
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "fiscal_year_start_month",
+      "label": "Fiscal Year Start Month",
+      "description": "Month when the Indian fiscal year starts (always April = 4)",
+      "required": false,
+      "default": "4"
+    },
+    {
+      "key": "hitl_amount_threshold",
+      "label": "HITL Amount Threshold (₹)",
+      "description": "Tally write operations above this amount (in rupees) trigger enhanced HITL review. Default: 100000 (₹1 lakh).",
+      "required": false,
+      "default": "100000"
+    }
+  ],
+  "dependencies": []
+}

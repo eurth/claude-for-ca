@@ -1,0 +1,9 @@
+{
+  "id": "claude-for-ca-tp",
+  "name": "Transfer Pricing — Claude for CA",
+  "version": "1.0.0",
+  "description": "Transfer pricing compliance assistant for Indian CA firms. Covers Form 3CEB, Rule 10D TP documentation, tested party selection, PLI computation, and benchmarking.",
+  "author": "EurthTech | Mentored by CA Butchi Babu, Gorantla Associates",
+  "tags": ["transfer-pricing", "form-3ceb", "india", "ca", "international-tax"],
+  "dependencies": ["claude-for-ca-core"]
+}

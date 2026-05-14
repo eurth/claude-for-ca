@@ -1,0 +1,9 @@
+{
+  "id": "claude-for-ca-advisory",
+  "name": "Advisory CA — Claude for CA",
+  "version": "1.0.0",
+  "description": "Business advisory assistant for CA firms — tax planning, business restructuring, MSME advisory, valuation, and due diligence.",
+  "author": "EurthTech | Mentored by CA Butchi Babu, Gorantla Associates",
+  "tags": ["advisory", "tax-planning", "valuation", "msme", "india", "ca"],
+  "dependencies": ["claude-for-ca-core"]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "claude-for-ca-student",
+  "name": "CA Student Hub — Claude for CA",
+  "version": "1.0.0",
+  "description": "CA articleship and exam preparation hub for Indian CA students and firms. Covers articleship diary logging, ICAI practical training tracking, and exam revision notes.",
+  "author": "EurthTech | Mentored by CA Butchi Babu, Gorantla Associates",
+  "tags": ["ca-student", "articleship", "icai", "exam-prep", "india"],
+  "dependencies": ["claude-for-ca-core"]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "claude-for-ca-cold-start",
+  "name": "Claude for CA — Onboarding",
+  "description": "One-time firm onboarding. Conducts an interactive interview to build the firm profile, client registry seed, and compliance calendar. Writes everything to the local SQLite memory bank. Run this before installing any domain plugin.",
+  "version": "0.1.0",
+  "author": "EurthTech",
+  "license": "Apache-2.0",
+  "dependencies": ["claude-for-ca-core"]
+}

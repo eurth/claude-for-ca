@@ -1,0 +1,16 @@
+{
+  "id": "claude-for-ca-mca",
+  "name": "MCA / Secretarial Compliance — Claude for CA",
+  "version": "1.0.0",
+  "description": "Complete MCA / ROC secretarial compliance assistant for Indian CA firms. Covers ROC filing tracker, board resolutions, annual compliance, charge registry, and ROC due date monitoring.",
+  "author": "EurthTech | Mentored by CA Butchi Babu, Gorantla Associates",
+  "tags": ["mca", "roc", "companies-act", "secretarial", "india", "ca"],
+  "dependencies": ["claude-for-ca-core"],
+  "userConfig": {
+    "mca21_portal": {
+      "description": "MCA21 V3 portal URL",
+      "type": "string",
+      "default": "https://www.mca.gov.in"
+    }
+  }
+}

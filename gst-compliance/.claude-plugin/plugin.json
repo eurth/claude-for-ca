@@ -1,0 +1,27 @@
+{
+  "id": "claude-for-ca-gst",
+  "name": "GST Compliance — Claude for CA",
+  "version": "1.0.0",
+  "description": "Complete GST compliance assistant for Indian CA firms. Covers GSTR-1, GSTR-3B, ITC reconciliation, notice triage, annual return (GSTR-9/9C), and GST audit.",
+  "author": "EurthTech | Mentored by CA Butchi Babu, Gorantla Associates",
+  "tags": ["gst", "india", "compliance", "ca", "tax"],
+  "dependencies": ["claude-for-ca-core"],
+  "userConfig": {
+    "default_gstin": {
+      "description": "Default client GSTIN for quick access (can override per session)",
+      "type": "string",
+      "default": ""
+    },
+    "gst_filing_mode": {
+      "description": "Filing mode for most clients (monthly/quarterly QRMP)",
+      "type": "string",
+      "default": "monthly",
+      "options": ["monthly", "qrmp"]
+    },
+    "gst_portal_url": {
+      "description": "GST portal URL",
+      "type": "string",
+      "default": "https://gst.gov.in"
+    }
+  }
+}

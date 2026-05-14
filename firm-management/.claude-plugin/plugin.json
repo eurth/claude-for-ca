@@ -1,0 +1,9 @@
+{
+  "id": "claude-for-ca-firm-mgmt",
+  "name": "Firm Management — Claude for CA",
+  "version": "1.0.0",
+  "description": "Practice management assistant for CA firms — fee tracking, staff utilization, client profitability, and monthly practice review.",
+  "author": "EurthTech | Mentored by CA Butchi Babu, Gorantla Associates",
+  "tags": ["firm-management", "fees", "staff", "practice", "india", "ca"],
+  "dependencies": ["claude-for-ca-core"]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "claude-for-ca-payroll",
+  "name": "Payroll Compliance — Claude for CA",
+  "version": "1.0.0",
+  "description": "Payroll compliance assistant for Indian CA firms. Covers PF, ESI, Professional Tax, payroll reconciliation, and ECR generation.",
+  "author": "EurthTech | Mentored by CA Butchi Babu, Gorantla Associates",
+  "tags": ["payroll", "pf", "esic", "professional-tax", "india", "ca"],
+  "dependencies": ["claude-for-ca-core"]
+}

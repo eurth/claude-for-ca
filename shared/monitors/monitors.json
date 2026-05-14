@@ -1,0 +1,30 @@
+[
+  {
+    "name": "gst-due-dates",
+    "description": "GST return due date alerts. Fires 7 days and 2 days before GSTR-1 (11th), GSTR-3B (20th), PMT-06 (25th), GSTR-9/9C (31 Dec).",
+    "command": "${CLAUDE_PLUGIN_ROOT}/bin/monitor-gst-dates.sh",
+    "schedule": "0 8 * * *",
+    "alertOn": "stdout"
+  },
+  {
+    "name": "notice-deadlines",
+    "description": "Statutory notice response deadline alerts. Fires when a notice due date is 30, 15, 7, or 2 days away.",
+    "command": "${CLAUDE_PLUGIN_ROOT}/bin/monitor-notice-deadlines.sh",
+    "schedule": "0 9 * * *",
+    "alertOn": "stdout"
+  },
+  {
+    "name": "tds-due-dates",
+    "description": "TDS deposit (7th) and return filing (31st after quarter end) due date alerts.",
+    "command": "${CLAUDE_PLUGIN_ROOT}/bin/monitor-tds-dates.sh",
+    "schedule": "0 8 * * *",
+    "alertOn": "stdout"
+  },
+  {
+    "name": "audit-trail-review",
+    "description": "Daily summary of AI-assisted actions logged in the audit trail — keeps CAs informed of what the agent did.",
+    "command": "${CLAUDE_PLUGIN_ROOT}/bin/monitor-audit-summary.sh",
+    "schedule": "0 18 * * 1-5",
+    "alertOn": "stdout"
+  }
+]

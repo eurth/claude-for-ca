@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "memory_bank": {
+      "command": "python",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/mcp-server/memory_bank_server.py"],
+      "env": {
+        "MEMORY_BANK_DB": "${CLAUDE_PLUGIN_DATA}/claude-for-ca/practice.db",
+        "FIRM_NAME": "${user_config.firm_name}",
+        "CA_NAME": "${user_config.ca_name}",
+        "FIRM_GSTIN": "${user_config.firm_gstin}"
+      },
+      "description": "Offline SQLite memory bank — firm profile, client registry, notice tracker, compliance calendar, audit trail"
+    },
+    "tally": {
+      "command": "python",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/../../mcp-connectors/tally/tally_mcp_server.py"],
+      "env": {
+        "TALLY_DSN": "${user_config.tally_dsn}"
+      },
+      "description": "Tally ERP ODBC connector — trial balance, ledger dumps, voucher data. Only active when TALLY_DSN is configured."
+    }
+  }
+}

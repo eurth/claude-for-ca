@@ -1,0 +1,16 @@
+{
+  "id": "claude-for-ca-audit",
+  "name": "Audit & Assurance — Claude for CA",
+  "version": "1.0.0",
+  "description": "Complete audit and assurance assistant for Indian CA firms. Covers CARO 2020, risk matrices (SA-315), LFAR, bank audit, internal audit, and working paper drafts.",
+  "author": "EurthTech | Mentored by CA Butchi Babu, Gorantla Associates",
+  "tags": ["audit", "assurance", "caro2020", "lfar", "india", "ca"],
+  "dependencies": ["claude-for-ca-core"],
+  "userConfig": {
+    "audit_year": {
+      "description": "Current audit financial year (e.g. 2025-26)",
+      "type": "string",
+      "default": "2025-26"
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "claude-for-ca-onboarding",
+  "name": "Client Onboarding — Claude for CA",
+  "version": "1.0.0",
+  "description": "Client onboarding assistant for CA firms — engagement letters (SA-210), fee proposals, KYC checklists, and client communication.",
+  "author": "EurthTech | Mentored by CA Butchi Babu, Gorantla Associates",
+  "tags": ["onboarding", "engagement-letter", "kyc", "fee-quote", "india", "ca"],
+  "dependencies": ["claude-for-ca-core"]
+}

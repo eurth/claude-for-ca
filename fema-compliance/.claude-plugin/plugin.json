@@ -1,0 +1,9 @@
+{
+  "id": "claude-for-ca-fema",
+  "name": "FEMA Compliance — Claude for CA",
+  "version": "1.0.0",
+  "description": "FEMA and RBI compliance assistant for Indian CA firms. Covers FDI (FC-GPR, FC-TRS, FIFP), ODI, FLA, APR, and FCGPR annual returns.",
+  "author": "EurthTech | Mentored by CA Butchi Babu, Gorantla Associates",
+  "tags": ["fema", "rbi", "fdi", "odi", "india", "ca"],
+  "dependencies": ["claude-for-ca-core"]
+}

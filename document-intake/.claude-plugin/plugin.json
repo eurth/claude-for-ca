@@ -1,0 +1,39 @@
+{
+  "id": "claude-for-ca-document-intake",
+  "name": "Claude for CA — Document Intake & Accounts",
+  "description": "Process invoices and bank statements from email, PDF files, or folders. Extract structured data and produce Tally-ready import files or a complete Master Excel Accounts workbook. Works with password-protected and scanned PDFs.",
+  "version": "0.1.0",
+  "author": "EurthTech",
+  "license": "Apache-2.0",
+  "dependencies": ["claude-for-ca-core"],
+  "userConfig": [
+    {
+      "key": "master_excel_path",
+      "label": "Master Excel Workbook Path",
+      "description": "Full path to the Master Accounts Excel workbook (e.g. C:\\CA Files\\Gorantla Associates\\Master Accounts FY2526.xlsx). Claude will read and update this file.",
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "tally_import_folder",
+      "label": "Tally Import Folder",
+      "description": "Folder where Tally XML/CSV import files will be saved (e.g. C:\\Tally\\Imports). You then import these files in Tally via Gateway → Import Data.",
+      "required": false,
+      "default": ""
+    },
+    {
+      "key": "invoice_inbox_label",
+      "label": "Gmail Label for Invoices",
+      "description": "Gmail label or search query to find invoice emails (e.g. 'label:invoices' or 'subject:invoice has:attachment'). Only needed if using the email-invoice-fetch skill.",
+      "required": false,
+      "default": "has:attachment (invoice OR bill OR receipt)"
+    },
+    {
+      "key": "default_tally_company",
+      "label": "Default Tally Company Name",
+      "description": "The company name in Tally that extracted vouchers should be posted to. Must match exactly as it appears in Tally.",
+      "required": false,
+      "default": ""
+    }
+  ]
+}

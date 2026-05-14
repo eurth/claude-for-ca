@@ -1,0 +1,97 @@
+{
+  "description": "Financial integrity guardrails for Indian CA practice. All portal filings and Tally write operations require explicit human approval. All MCP tool calls are logged to the append-only audit trail.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__gst_portal__(submit|file|amend|save_return|upload).*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/bin/hitl-gst-filing.sh",
+            "statusMessage": "GST filing integrity check — preparing HITL checklist...",
+            "timeout": 15000
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__traces__(file|submit|amend|upload).*|mcp__tdscpc__(file|submit).*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/bin/hitl-tds-filing.sh",
+            "statusMessage": "TDS/TCS filing integrity check — preparing HITL checklist...",
+            "timeout": 15000
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__tally__(create|write|update|delete|modify|insert|post|alter).*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/bin/hitl-tally-write.sh",
+            "statusMessage": "Tally write integrity check — this action modifies accounting data...",
+            "timeout": 15000
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__mca21__(file|submit|sign|upload|eform).*|mcp__mca__(file|submit|sign).*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/bin/hitl-mca-filing.sh",
+            "statusMessage": "MCA/ROC filing integrity check — preparing HITL checklist...",
+            "timeout": 15000
+          }
+        ]
+      },
+      {
+        "matcher": "mcp__income_tax__(submit|file|verify|sign|upload|efiling).*|mcp__efiling__(submit|file|upload).*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/bin/hitl-itr-filing.sh",
+            "statusMessage": "ITR filing integrity check — preparing HITL checklist...",
+            "timeout": 15000
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "mcp__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/bin/audit-log.sh",
+            "async": true
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "model": "claude-haiku-4-5",
+            "prompt": "You are a compliance safety screener for Indian CA firms. Analyse this user message: $ARGUMENTS\n\nCheck if the message explicitly or implicitly requests ANY of the following actions WITHOUT a clear human confirmation phrase (like 'I confirm', 'please proceed', 'go ahead and file', 'I have verified'):\n1. Filing or submitting any statutory return (GSTR-1, GSTR-3B, GSTR-9, 26Q, 24Q, ITR, AOC-4, MGT-7, FC-GPR, etc.)\n2. Creating, modifying, or deleting vouchers/entries in Tally or any ERP\n3. Generating Form 16, Form 16A, Form 27D, or any TDS certificate\n4. Signing, uploading, or certifying any statutory document\n5. Making a payment from client accounts or firm accounts\n6. Responding formally to an Income Tax / GST / FEMA / ROC notice on behalf of a client\n\nIf such an action is requested WITHOUT a confirmation phrase, respond ONLY with valid JSON:\n{\"ok\": false, \"reason\": \"[Action] requires explicit CA confirmation before I proceed. Please review the details and confirm to continue.\"}\n\nIf the message is safe (information request, analysis, draft preparation, or already confirmed), respond ONLY with valid JSON:\n{\"ok\": true}\n\nRespond with JSON only. No explanation text outside the JSON.",
+            "continueOnBlock": true
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/bin/load-firm-context.sh",
+            "statusMessage": "Loading firm context and compliance calendar..."
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "gst_portal": {
+      "command": "python3",
+      "args": ["${CLAUDE_PLUGIN_ROOT}/../../mcp-connectors/gst-portal/gst_portal_mcp.py"],
+      "description": "GST portal connector (Selenium-based)",
+      "env": {
+        "GST_PORTAL_URL": "https://gst.gov.in"
+      }
+    }
+  }
+}
