@@ -1,8 +1,288 @@
 ﻿# Claude for CA
 
-> AI-powered practice assistant for Indian Chartered Accountants — No coding required
+> AI-powered practice assistant for Indian Chartered Accountants
 
-Built by **[EurthTech](https://eurth.in)** | Designed by **CogentDeFi** | Mentored by **CA Butchi Babu, Gorantla Associates**
+**Built by [EurthTech](https://eurth.in) · Designed by CogentDeFi · Mentored by CA Butchi Babu, Gorantla Associates**
+
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![Public Repository](https://img.shields.io/badge/Contributions-Welcome-brightgreen.svg)](#contributing)
+
+---
+
+## What Is This?
+
+A complete AI assistant toolkit for Indian CA firms — covering GST, Income Tax, TDS, Audit, MCA, Payroll, and daily practice management.
+
+**You do not need to be a software developer to use this.** The primary use is through [Claude Desktop](https://claude.ai/download) — a free app on your computer. You chat with Claude in plain English and get professional CA-quality outputs.
+
+This repository was built for and with **CA Butchi Babu's team at Gorantla Associates** and is now open to the entire CA community.
+
+---
+
+## ⚡ Start Here — Get Running in 30 Minutes (No Technical Skills Needed)
+
+### Step 1 — Download Claude Desktop
+Go to **[claude.ai/download](https://claude.ai/download)** → Download for Windows or Mac → Install like any normal app → Log in with a Claude account ([claude.ai](https://claude.ai) — free or Pro plan).
+
+### Step 2 — Create Your First Project
+In Claude Desktop: Click **"+ New Project"** → give it a name (e.g. **GST Compliance**) → click **"Set project instructions"**.
+
+Open the file [`claude-desktop-projects/01-gst-compliance.md`](claude-desktop-projects/01-gst-compliance.md) from this repository (you can view it directly on GitHub). Copy the text between the `━━━` separator lines and paste it into the instructions box → Save.
+
+### Step 3 — Start Working
+Type your question in plain English. Examples:
+
+> *"My client received a DRC-01 notice for Rs.2.8 lakh ITC mismatch in GSTR-3B for FY 2023-24. Help me analyse and draft a reply."*
+
+> *"Calculate GSTR-3B for April 2026 — taxable outward supplies Rs.18,50,000 at 18%, ITC available Rs.2,10,000."*
+
+> *"What is the late fee for GSTR-1 filed 45 days after due date? Turnover Rs.3.5 Cr, not a nil return."*
+
+That is it. No terminal, no code, no installation beyond Claude Desktop.
+
+→ **[Full setup guide with screenshots: `claude-desktop-projects/00-SETUP-GUIDE.md`](claude-desktop-projects/00-SETUP-GUIDE.md)**
+
+---
+
+## 📋 Team Prompt Playbook — For Daily Office Use
+
+If you have junior staff or interns, the **[Team Prompt Playbook](claude-desktop-projects/09-team-prompt-playbook.md)** solves a common problem: *team members don't know how to write good prompts and get inconsistent results.*
+
+The playbook has **30 ready-to-use prompts** for every common CA office task. Each prompt has `[PLACEHOLDERS]` to fill in — no prompting skill required.
+
+| Section | Prompts |
+|---------|---------|
+| Document & Invoice Processing | Extract invoices to Excel, bank statements, contracts, payslips |
+| Excel Data Preparation | GSTR-3B working, TDS working, IT computation, expense register |
+| Client Emails & Letters | Document requests, deadline reminders, fee reminders, notice replies |
+| Accounts & Ledger Review | Ledger anomaly detection, AP ageing, bank reconciliation, MIS report |
+| Compliance Checklists | Monthly due dates, GST invoice compliance check, 26AS reconciliation |
+| Calculations | GST late fee, TDS interest (201(1A)), PF/ESIC, Professional Tax |
+| Quick Reference | ITR form selector, TDS rate check, GST rate / HSN-SAC lookup |
+
+**How an intern uses it:**
+1. Open the playbook → find the task (Ctrl+F)
+2. Copy the prompt inside the `--- COPY FROM HERE ---` block
+3. Fill in the `[SQUARE BRACKET]` placeholders
+4. Paste their document/data below
+5. Send to Claude → get professional output
+
+→ **[View Team Prompt Playbook](claude-desktop-projects/09-team-prompt-playbook.md)**
+
+---
+
+## 🗂️ All Claude Desktop Projects (System Prompts)
+
+Each file below is a standalone Claude Desktop Project. Copy the instructions section into a new Project in Claude Desktop.
+
+| File | Domain Covered |
+|------|---------------|
+| [00-SETUP-GUIDE.md](claude-desktop-projects/00-SETUP-GUIDE.md) | How to set up, connect Tally, privacy notes |
+| [01-gst-compliance.md](claude-desktop-projects/01-gst-compliance.md) | GST — GSTR-1/3B/9/9C, ITC recon, notices, due dates, blocked credits |
+| [02-income-tax-tds.md](claude-desktop-projects/02-income-tax-tds.md) | Income Tax + TDS — ITR forms, slabs, advance tax, 26AS, all TDS sections |
+| [03-audit-assurance.md](claude-desktop-projects/03-audit-assurance.md) | Audit — all 21 CARO 2020 clauses, SA-315 risk, bank NPA norms, materiality |
+| [04-mca-tp-fema.md](claude-desktop-projects/04-mca-tp-fema.md) | MCA + TP + FEMA — ROC filings, board resolutions, TP methods, FDI reporting |
+| [05-advisory-payroll.md](claude-desktop-projects/05-advisory-payroll.md) | Advisory + Payroll — regime comparison, PF/ESIC, state PT, MSME 43B(h) |
+| [06-client-firm-management.md](claude-desktop-projects/06-client-firm-management.md) | KYC, PMLA obligations, engagement letters (SA-210), fee management |
+| [07-opensource-alternatives.md](claude-desktop-projects/07-opensource-alternatives.md) | Free/open-source options if you don't want Claude |
+| [08-master-team-workspace.md](claude-desktop-projects/08-master-team-workspace.md) | Single all-in-one Project for the entire team |
+| [09-team-prompt-playbook.md](claude-desktop-projects/09-team-prompt-playbook.md) | 30 standard prompts for daily CA office tasks |
+
+---
+
+## 🔌 Optional: Connect Tally for Live Data
+
+The Tally MCP connector lets Claude read your Tally data directly — trial balance, ledger reports, stock reports. This is optional and only needed if you want live Tally data in Claude.
+
+Setup takes about 15 minutes and requires Python (free). Full instructions in the [Setup Guide](claude-desktop-projects/00-SETUP-GUIDE.md#step-5-optional--connect-tally-for-live-data).
+
+MCP connectors are also available for:
+- GST Portal (read GSTR-1, GSTR-3B, GSTR-2B drafts)
+- TRACES (download 26AS, TDS certificates)
+- MCA21 (company profile, director details, filing status)
+
+> These connectors are **read-only by default**. Any write/submit action requires explicit CA approval each time — a confirmation checklist is shown before anything is filed or posted.
+
+---
+
+## 🔒 Safety — Nothing Is Filed Without Your Approval
+
+Claude will **never automatically file** any return, post to Tally, or send any communication without showing you a checklist and waiting for your approval. This is enforced at every step.
+
+**Before any GST filing:**
+```
+GST FILING — YOUR APPROVAL REQUIRED
+
+Return    : GSTR-3B
+Client    : Example Pvt Ltd
+GSTIN     : 37XXXXX1234Z5
+Period    : April 2026
+Tax Amount: Rs.2,34,500
+
+Confirm before approving:
+  [ ] GSTR-1 is filed for this period
+  [ ] ITC reconciled with GSTR-2B
+  [ ] Cash ledger balance is sufficient
+  [ ] Client has authorised this filing
+
+Approve = proceed  |  Deny = stop
+```
+
+**Before any Tally write:**
+```
+TALLY WRITE — YOUR APPROVAL REQUIRED
+⚠  This action modifies accounting data.
+
+Action       : Create 47 Purchase Vouchers
+Company      : Example Infra Pvt Ltd
+Total Debit  : Rs.18,42,000
+Date Range   : 01 Apr 2026 to 30 Apr 2026
+
+  [ ] Voucher amounts are correct
+  [ ] Ledger heads are correctly mapped
+  [ ] No duplicate entries
+
+Approve = post to Tally  |  Deny = stop
+```
+
+---
+
+## 📁 Repository Structure
+
+```
+claude-for-ca/
+│
+├── claude-desktop-projects/     ← START HERE for non-technical users
+│   ├── 00-SETUP-GUIDE.md        ← How to set up Claude Desktop
+│   ├── 01-gst-compliance.md     ← GST Project system prompt
+│   ├── 02-income-tax-tds.md     ← Income Tax + TDS Project
+│   ├── 03-audit-assurance.md    ← Audit & Assurance Project
+│   ├── 04-mca-tp-fema.md        ← MCA, Transfer Pricing, FEMA
+│   ├── 05-advisory-payroll.md   ← Advisory, Payroll, MSME
+│   ├── 06-client-firm-management.md  ← KYC, Engagement, Fees
+│   ├── 07-opensource-alternatives.md ← Free alternatives to Claude
+│   ├── 08-master-team-workspace.md   ← All-in-one team Project
+│   └── 09-team-prompt-playbook.md    ← 30 standard prompts for daily work
+│
+├── mcp-connectors/              ← Optional live data connectors (Python)
+│   ├── tally/                   ← Tally Prime / ERP 9 connector
+│   ├── gst-portal/              ← GST Portal Selenium connector
+│   ├── traces/                  ← TRACES TDS portal connector
+│   └── mca21/                   ← MCA21 V3 API connector
+│
+├── gst-compliance/              ← Claude Code plugin (for technical users)
+├── income-tax/                  ← Claude Code plugin
+├── tds-compliance/              ← Claude Code plugin
+├── audit/                       ← Claude Code plugin
+├── mca-secretarial/             ← Claude Code plugin
+├── transfer-pricing/            ← Claude Code plugin
+├── fema-compliance/             ← Claude Code plugin
+├── payroll-compliance/          ← Claude Code plugin
+├── advisory-ca/                 ← Claude Code plugin
+├── client-onboarding/           ← Claude Code plugin
+├── ca-student/                  ← Claude Code plugin
+├── firm-management/             ← Claude Code plugin
+├── document-intake/             ← Claude Code plugin
+├── shared/                      ← Core HITL hooks, memory bank, audit log
+│
+├── references/
+│   └── ca-compliance-calendar.md  ← Full Indian CA compliance calendar
+│
+└── CLAUDE.md                    ← Firm profile template (fill this in)
+```
+
+---
+
+## 👨‍💻 For Technical Users — Claude Code Plugin Suite
+
+If you use Claude Code (VS Code extension or terminal), you get the complete automation experience: skill invocations, compliance calendar monitoring, firm memory, and a full audit trail.
+
+**16 plugins | 59 skills | 8 monitoring agents | 4 MCP connectors**
+
+```bash
+git clone https://github.com/eurth/claude-for-ca
+cd claude-for-ca
+
+# One-time firm onboarding
+claude install plugin ./shared
+claude install plugin ./cold-start
+claude "/cold-start:onboard-firm"
+
+# Install the plugins you need
+claude install plugin ./gst-compliance
+claude install plugin ./income-tax
+claude install plugin ./tds-compliance
+claude install plugin ./audit
+```
+
+Then use skills like:
+```
+/gst-compliance:gstr3b-review
+/income-tax:notice-analyser
+/tds-compliance:26as-reconciliation
+/audit:caro-2020-checklist
+```
+
+See each plugin folder's `README.md` for the full skill list.
+
+---
+
+## ❓ Frequently Asked Questions
+
+**Do I need to pay for Claude?**
+The free Claude plan has limits (message caps). For daily professional use, Claude Pro (~Rs.1,700/month) is recommended for one person. For a team, Claude Teams (~Rs.2,500/user/month) lets multiple staff share Projects.
+
+**Do I need to install anything?**
+For Claude Desktop: just download and install the app — it works like any normal software. No Python, no Git, no terminal.
+For Tally connector: needs Python (free, 10-minute install). Instructions in the [Setup Guide](claude-desktop-projects/00-SETUP-GUIDE.md).
+
+**Can Claude file GST returns or TDS returns automatically?**
+No. Every filing action requires explicit CA approval. This is enforced in the system and cannot be bypassed.
+
+**Is client data safe?**
+Claude processes data on Anthropic's servers (SOC 2 compliant). For sensitive work, avoid pasting actual PAN/Aadhaar numbers — use client descriptions instead. Claude Pro/Teams users' conversations are not used for model training per Anthropic's policy.
+
+**What if my PDF is in Telugu or Hindi?**
+Claude reads multilingual PDFs. Output is in English (or whichever language you ask for).
+
+**Is this affiliated with Anthropic or ICAI?**
+No. This is an independent open-source project. It uses Anthropic's Claude API but is not endorsed by Anthropic or the Institute of Chartered Accountants of India.
+
+**My client received a notice I've never seen before. Can Claude still help?**
+Yes — paste the notice text and describe the situation. Claude will explain the notice, identify the section and its implications, and help draft a response.
+
+---
+
+## 🤝 Contributing
+
+This repository is open to the CA community. Contributions welcome:
+
+- **New prompts for the playbook** — If you have a task that's not covered, add a prompt and submit a pull request
+- **Better Excel column formats** — If your firm uses specific column layouts, share them
+- **State-specific compliance** — Professional tax rates, state VAT specifics, local body taxes
+- **Bug reports / corrections** — Tax rates change, sections get amended — flag anything outdated
+- **Translations** — Prompts in Telugu, Hindi, Tamil for regional teams
+
+**How to contribute:**
+1. Fork this repository on GitHub
+2. Make your changes
+3. Submit a Pull Request with a brief description
+
+**For suggestions without coding:** Open a GitHub Issue — describe what you need and we'll add it.
+
+---
+
+## Credits
+
+Conceptualised and built by **[EurthTech](https://eurth.in)**
+Designed by **CogentDeFi**
+Mentored by **CA Butchi Babu, Gorantla Associates, Andhra Pradesh**
+
+---
+
+## License
+
+[Apache 2.0](LICENSE) — free to use, modify, and deploy in your practice. Attribution appreciated.
 
 ---
 
