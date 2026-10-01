@@ -46,3 +46,7 @@ th, td { text-align: left; padding: 0.4rem 0.5rem; border-bottom: 1px solid var(
 .err { color: var(--warn); font-size: 0.9rem; }
 .login { max-width: 380px; margin: 12vh auto; background: var(--card); padding: 2rem; border: 1px solid var(--line); border-radius: 8px; }
 pre { white-space: pre-wrap; font-size: 0.82rem; background: #efe9dc; padding: 0.75rem; border-radius: 4px; }
+.register { margin-top: 0.4rem; }
+.register .num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.exceptions { margin: 0.4rem 0 0; padding-left: 1.2rem; }
+.exceptions li { margin-bottom: 0.35rem; }

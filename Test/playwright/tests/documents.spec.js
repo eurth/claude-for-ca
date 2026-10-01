@@ -17,8 +17,9 @@ test("extract invoice PDF produces a purchase output", async ({ page }) => {
   await expect(page).toHaveURL(/\/workpacks\//, { timeout: 30000 });
   await page.locator('input[type="file"]').setInputFiles(invoice);
   await page.getByRole("button", { name: /Run/ }).click();
-  await expect(page.getByRole("heading", { name: "Summary" })).toBeVisible({ timeout: 150000 });
-  await expect(page.getByText(/Sharma Traders|ST\/1042|packing material/i).first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Summary" })).toBeVisible({ timeout: 30000 });
+  await expect(page.getByRole("cell", { name: "Sharma Traders" })).toBeVisible();
+  await expect(page.getByRole("cell", { name: "ST/1042" })).toBeVisible();
 });
 
 test("bank statement PDF produces a ledger or summary", async ({ page }) => {
@@ -28,7 +29,7 @@ test("bank statement PDF produces a ledger or summary", async ({ page }) => {
   await expect(page).toHaveURL(/\/workpacks\//, { timeout: 30000 });
   await page.locator('input[type="file"]').setInputFiles(bank);
   await page.getByRole("button", { name: /Run/ }).click();
-  await expect(page.getByRole("heading", { name: "Summary" })).toBeVisible({ timeout: 150000 });
+  await expect(page.getByRole("heading", { name: "Summary" })).toBeVisible({ timeout: 30000 });
   await expect(page.getByText(/Extracted 12 bank rows/i)).toBeVisible();
-  await expect(page.getByRole("cell", { name: /HDFC-50200011223344/ })).toBeVisible();
+  await expect(page.getByRole("cell", { name: /NEFT\/SHARMA TRADERS/i })).toBeVisible();
 });

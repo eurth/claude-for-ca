@@ -54,7 +54,7 @@ npx playwright test
 | `samples/invoices/INV-ST-1042-duplicate.pdf` | Same number as ST/1042 — exception / duplicate check |
 | `samples/bank/HDFC-50200011223344-Apr-2026.pdf` | April 2026 HDFC statement with NEFT, UPI, GST payment, unmatched cash/UPI |
 
-In the UI: Work → **Extract invoices** or **Process bank statement** → upload the PDF → Run (or Start job, then upload and Run again).
+In the UI: Work → pick a job (now grouped by GST, TDS, Audit, …) → upload PDFs → Run. Extract invoices and bank statement also write Excel. Master accounts workbook and Tally import reuse those registers.
 
 ## Cases
 

@@ -196,93 +196,38 @@ def _mock(messages: list[dict], feature_id: str | None = None) -> str:
             suggestion = "tally-import-builder"
         elif "notice" in blob:
             suggestion = "notice-triage"
+        elif "master" in blob or "excel" in blob or "workbook" in blob:
+            suggestion = "master-accounts-sheet"
         payload = {
             "summary": f"Use the feature: {suggestion}",
             "suggested_feature_id": suggestion,
             "artifacts": [{"type": "router_suggestion", "title": "Suggested feature", "data": {"id": suggestion}}],
         }
-    elif fid == "gstr3b-review":
-        payload = {
-            "summary": "Draft GSTR-3B working prepared. Partner must approve before anyone files on the GST portal.",
-            "artifacts": [
-                {
-                    "type": "gstr3b_working",
-                    "title": "GSTR-3B working (draft)",
-                    "data": {
-                        "outward_taxable": 0,
-                        "itc_available": 0,
-                        "tax_payable": 0,
-                        "notes": [
-                            "Draft only — not filed.",
-                            "Upload GSTR-2B and the purchase register, then run again for a full working.",
-                        ],
-                    },
-                }
-            ],
-            "approval": {"kind": "gst_filing"},
+        return "```json\n" + json.dumps(payload, indent=2) + "\n```"
+
+    from app.runtime.catalog import get_feature
+
+    try:
+        feature = get_feature(fid)
+    except KeyError:
+        feature = {
+            "name": fid or "Job",
+            "produces": ["note"],
+            "filing_class": None,
         }
-    elif fid == "tally-import-builder":
-        payload = {
-            "summary": "Tally XML will be generated from the purchase register on this workpack.",
-            "artifacts": [],
-            "approval": {"kind": "tally_write"},
-        }
-    elif fid == "notice-triage":
-        payload = {
-            "summary": "Draft notice summary. Attach the notice PDF and run again for a full analysis. Partner must approve before sending.",
-            "artifacts": [
-                {
-                    "type": "notice_summary",
-                    "title": "Notice summary (draft)",
-                    "data": {"plain_language": "Upload the notice PDF and run again to extract the demand, section and deadline.", "deadline": None},
-                },
-                {
-                    "type": "draft_reply",
-                    "title": "Draft reply",
-                    "data": {"body": "[Draft — Partner must review before sending.]"},
-                },
-            ],
-            "approval": {"kind": "notice_send"},
-        }
-    elif fid == "bank-statement-processor":
-        payload = {
-            "summary": "Bank statement draft extract. Upload the PDF and run again to fill the ledger.",
-            "artifacts": [
-                {
-                    "type": "bank_ledger",
-                    "title": "Bank ledger (draft)",
-                    "data": {"rows": [], "notes": ["Upload a bank/CC PDF, then run again."]},
-                }
-            ],
-        }
-    else:
-        payload = {
-            "summary": "Purchase register draft with one sample row. Upload invoice PDFs and run again to replace this with extracted invoices.",
-            "artifacts": [
-                {
-                    "type": "purchase_register",
-                    "title": "Purchase register (draft)",
-                    "data": {
-                        "rows": [
-                            {
-                                "vendor": "Sample Vendor",
-                                "gstin": "37AABCS1234Z1Z5",
-                                "invoice_no": "INV-1",
-                                "date": "20260405",
-                                "taxable_value": 1000,
-                                "cgst": 90,
-                                "sgst": 90,
-                                "igst": 0,
-                                "total": 1180,
-                            }
-                        ]
-                    },
-                },
-                {
-                    "type": "exception_report",
-                    "title": "Exceptions",
-                    "data": {"items": ["No invoice PDF attached yet — this is a sample row only."]},
-                },
-            ],
-        }
+    artifacts = []
+    for kind in feature.get("produces") or ["note"]:
+        artifacts.append(
+            {
+                "type": kind,
+                "title": kind.replace("_", " ").title() + " (draft)",
+                "data": {"notes": ["Upload source documents, then run again for a full working."]},
+            }
+        )
+    payload = {
+        "summary": f"Draft {feature.get('name')}. Upload source documents and run again. Nothing is filed from this app.",
+        "artifacts": artifacts,
+    }
+    if feature.get("filing_class"):
+        payload["approval"] = {"kind": feature["filing_class"]}
     return "```json\n" + json.dumps(payload, indent=2) + "\n```"

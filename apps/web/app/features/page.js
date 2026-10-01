@@ -38,7 +38,18 @@ function FeaturesInner() {
     () => (clients?.entities || []).find((e) => e.id === entityId),
     [clients, entityId]
   );
-  const selected = features.find((f) => f.id === featureId);
+  const grouped = useMemo(() => {
+    const order = [];
+    const map = {};
+    for (const f of features) {
+      if (!map[f.section]) {
+        map[f.section] = [];
+        order.push(f.section);
+      }
+      map[f.section].push(f);
+    }
+    return order.map((section) => ({ section, items: map[section] }));
+  }, [features]);
 
   useEffect(() => {
     const regs = entity?.registrations || [];
@@ -56,7 +67,7 @@ function FeaturesInner() {
     if (e) e.preventDefault();
     const fid = nextId || featureId;
     if (nextId) setFeatureId(nextId);
-    const job = features.find((f) => f.id === fid) || selected;
+    const job = features.find((f) => f.id === fid) || features.find((f) => f.id === featureId);
     setErr("");
     if (!entityId) {
       setErr("Select a client first.");
@@ -78,7 +89,7 @@ function FeaturesInner() {
           note: note || null,
         }),
       });
-      router.push(`/workpacks/${created.id}?autorun=1`);
+      router.push(`/workpacks/${created.id}`);
     } catch (ex) {
       setErr(ex.message);
       setBusy(false);
@@ -89,8 +100,7 @@ function FeaturesInner() {
     <Shell>
       <h1>Work</h1>
       <p className="muted">
-        Choose client, GSTIN and period, then click a job. That opens a workpack and prepares a draft. Upload source
-        files on the next screen and run again for a fuller working.
+        Choose client, GSTIN and period, then click a job. Upload source files on the next screen, then Run.
       </p>
       <form onSubmit={(e) => start(e)} style={{ maxWidth: 520, marginBottom: 20 }}>
         <label>Client</label>
@@ -123,24 +133,28 @@ function FeaturesInner() {
         />
         {err ? <p className="err">{err}</p> : null}
       </form>
-      <div className="grid">
-        {features.map((f) => (
-          <button
-            type="button"
-            key={f.id}
-            className={`card ${featureId === f.id ? "selected" : ""}`}
-            disabled={busy}
-            onClick={() => start(null, f.id)}
-          >
-            <div className="muted">{f.section}</div>
-            <h3>{f.name}</h3>
-            <p className="muted">{f.description}</p>
-            <p style={{ marginTop: 8 }}>
-              <span className="btn">{busy && featureId === f.id ? "Opening…" : "Start job"}</span>
-            </p>
-          </button>
-        ))}
-      </div>
+      {grouped.map((g) => (
+        <div key={g.section} style={{ marginTop: 28 }}>
+          <h2>{g.section}</h2>
+          <div className="grid">
+            {g.items.map((f) => (
+              <button
+                type="button"
+                key={f.id}
+                className={`card ${featureId === f.id ? "selected" : ""}`}
+                disabled={busy}
+                onClick={() => start(null, f.id)}
+              >
+                <h3>{f.name}</h3>
+                <p className="muted">{f.description}</p>
+                <p style={{ marginTop: 8 }}>
+                  <span className="btn">{busy && featureId === f.id ? "Opening…" : "Start job"}</span>
+                </p>
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
     </Shell>
   );
 }

@@ -224,3 +224,90 @@ def test_intern_cannot_approve():
         assert denied.status_code == 403
         intern_inbox = client.get("/api/approvals", headers=intern)
         assert intern_inbox.status_code == 403
+
+
+def test_invoice_pdf_extracts_and_replaces_on_rerun():
+    with TestClient(app) as client:
+        h = _login(client)
+        entity, gstins = _entity_and_gstins(client, h)
+        gstin = next(r for r in gstins if r["value"].startswith("37"))
+        created = client.post(
+            "/api/workpacks",
+            headers=h,
+            json={
+                "feature_id": "pdf-data-extractor",
+                "entity_id": entity["id"],
+                "registration_id": gstin["id"],
+                "period": "2026-04",
+            },
+        )
+        pack_id = created.json()["id"]
+        samples = ROOT / "Test" / "samples" / "invoices"
+        for name in ("INV-ST-1042-Sharma-Traders.pdf", "INV-ST-1042-duplicate.pdf"):
+            with (samples / name).open("rb") as fh:
+                up = client.post(
+                    f"/api/workpacks/{pack_id}/files",
+                    headers=h,
+                    files={"upload": (name, fh, "application/pdf")},
+                    data={"artifact_type": "purchase_invoice"},
+                )
+                assert up.status_code == 200, up.text
+        ran = client.post(f"/api/workpacks/{pack_id}/run", headers=h)
+        assert ran.status_code == 200, ran.text
+        body = ran.json()
+        registers = [a for a in body["artifacts"] if a["type"] == "purchase_register"]
+        assert len(registers) == 1
+        rows = registers[0]["json"]["rows"]
+        assert any(r["invoice_no"] == "ST/1042" for r in rows)
+        exceptions = next(a for a in body["artifacts"] if a["type"] == "exception_report")
+        assert any("Duplicate" in item for item in exceptions["json"]["items"])
+        again = client.post(f"/api/workpacks/{pack_id}/run", headers=h).json()
+        assert len([a for a in again["artifacts"] if a["type"] == "purchase_register"]) == 1
+        assert len([a for a in again["artifacts"] if a["is_input"]]) == 2
+
+
+def test_master_accounts_and_excel_download():
+    with TestClient(app) as client:
+        h = _login(client)
+        entity, gstins = _entity_and_gstins(client, h)
+        gstin = next(r for r in gstins if r["value"].startswith("37"))
+        inv = client.post(
+            "/api/workpacks",
+            headers=h,
+            json={
+                "feature_id": "pdf-data-extractor",
+                "entity_id": entity["id"],
+                "registration_id": gstin["id"],
+                "period": "2026-04",
+            },
+        )
+        pack_id = inv.json()["id"]
+        sample = ROOT / "Test" / "samples" / "invoices" / "INV-ST-1042-Sharma-Traders.pdf"
+        with sample.open("rb") as fh:
+            client.post(
+                f"/api/workpacks/{pack_id}/files",
+                headers=h,
+                files={"upload": (sample.name, fh, "application/pdf")},
+                data={"artifact_type": "purchase_invoice"},
+            )
+        client.post(f"/api/workpacks/{pack_id}/run", headers=h)
+        master = client.post(
+            "/api/workpacks",
+            headers=h,
+            json={
+                "feature_id": "master-accounts-sheet",
+                "entity_id": entity["id"],
+                "period": "2026-04",
+            },
+        )
+        ran = client.post(f"/api/workpacks/{master.json()['id']}/run", headers=h)
+        assert ran.status_code == 200, ran.text
+        body = ran.json()
+        xlsx = next(a for a in body["artifacts"] if a["type"] == "master_accounts_xlsx")
+        dl = client.get(f"/api/workpacks/{master.json()['id']}/files/{xlsx['id']}", headers=h)
+        assert dl.status_code == 200
+        assert dl.content[:2] == b"PK"
+        feats = client.get("/api/features", headers=h).json()["features"]
+        assert len(feats) >= 45
+        assert any(f["id"] == "itc-reconcile" for f in feats)
+

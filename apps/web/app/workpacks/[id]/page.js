@@ -1,9 +1,10 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import Shell from "../../../components/Shell";
+import ArtifactView from "../../../components/ArtifactView";
 import { api, apiUrl, getToken } from "../../../lib/api";
 
 export default function WorkpackPage() {
@@ -16,11 +17,9 @@ export default function WorkpackPage() {
 
 function WorkpackInner() {
   const { id } = useParams();
-  const search = useSearchParams();
   const [pack, setPack] = useState(null);
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
-  const autoRan = useRef(false);
 
   function load() {
     return api(`/api/workpacks/${id}`).then(setPack).catch((e) => setErr(e.message));
@@ -43,39 +42,62 @@ function WorkpackInner() {
     }
   }
 
-  useEffect(() => {
-    if (!pack || !id || autoRan.current) return;
-    const key = `forca_autorun_${id}`;
-    if (search.get("autorun") === "1" && pack.status === "draft") {
-      if (typeof window !== "undefined" && sessionStorage.getItem(key)) return;
-      autoRan.current = true;
-      if (typeof window !== "undefined") sessionStorage.setItem(key, "1");
-      run();
-    }
-  }, [pack, search, id]);
-
   async function upload(ev) {
-    const file = ev.target.files?.[0];
-    if (!file) return;
-    const fd = new FormData();
-    fd.append("upload", file);
-    fd.append("artifact_type", file.name.toLowerCase().includes("2b") ? "gstr2b_excel" : "upload");
+    const files = [...(ev.target.files || [])];
+    if (!files.length) return;
     setBusy(true);
     setErr("");
     try {
       const token = getToken();
-      const res = await fetch(`${apiUrl()}/api/workpacks/${id}/files`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: fd,
-      });
-      if (!res.ok) throw new Error("Upload failed");
+      for (const file of files) {
+        const fd = new FormData();
+        fd.append("upload", file);
+        const lower = file.name.toLowerCase();
+        let kind = "upload";
+        if (lower.includes("2b")) kind = "gstr2b_excel";
+        else if (lower.includes("hdfc") || lower.includes("statement") || lower.includes("bank")) kind = "bank_pdf";
+        else if (lower.includes("inv") || lower.includes("invoice")) kind = "purchase_invoice";
+        fd.append("artifact_type", kind);
+        const res = await fetch(`${apiUrl()}/api/workpacks/${id}/files`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: fd,
+        });
+        if (!res.ok) throw new Error("Upload failed");
+      }
       await load();
     } catch (ex) {
       setErr(ex.message);
     } finally {
       setBusy(false);
+      ev.target.value = "";
     }
+  }
+
+  async function downloadExcel(artifact) {
+    const token = getToken();
+    const res = await fetch(`${apiUrl()}/api/workpacks/${pack.id}/xlsx/${artifact.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = (artifact.title || "working").replaceAll(" ", "_") + ".xlsx";
+    link.click();
+  }
+
+  async function download(artifact) {
+    const token = getToken();
+    const res = await fetch(`${apiUrl()}/api/workpacks/${pack.id}/files/${artifact.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = artifact.type === "tally_xml" ? "tally_import.xml" : artifact.title;
+    link.click();
   }
 
   if (!pack) {
@@ -87,6 +109,8 @@ function WorkpackInner() {
   }
 
   const pending = (pack.approvals || []).find((a) => a.status === "pending");
+  const uploaded = (pack.artifacts || []).filter((a) => a.is_input);
+  const outputs = (pack.artifacts || []).filter((a) => !a.is_input);
 
   return (
     <Shell>
@@ -99,11 +123,11 @@ function WorkpackInner() {
         {pack.period ? ` · ${pack.period}` : ""}
       </p>
       <p className="muted">
-        Upload source documents (invoices, 2B, bank PDF, notice), then run. Outputs stay on this client and period so
-        the next job can reuse them. Nothing is filed from this screen.
+        Upload the source PDFs first, then Run. A later job for the same client and period can reuse this working.
+        Nothing is filed from this screen.
       </p>
       <div className="row" style={{ margin: "1rem 0" }}>
-        <input type="file" onChange={upload} disabled={busy} />
+        <input type="file" multiple onChange={upload} disabled={busy} />
         <button className="btn" onClick={run} disabled={busy}>
           {busy ? "Working…" : pack.summary ? "Run again" : "Run job"}
         </button>
@@ -115,7 +139,7 @@ function WorkpackInner() {
           <p>{pack.summary}</p>
         </>
       ) : (
-        <p className="muted">Preparing a draft working…</p>
+        <p className="muted">Upload files, then click Run job.</p>
       )}
       {pending ? (
         <div className="card" style={{ margin: "1rem 0" }}>
@@ -125,61 +149,22 @@ function WorkpackInner() {
           <Link href="/approvals">Open approval inbox</Link>
         </div>
       ) : null}
-      <h2>Documents & outputs</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Type</th>
-            <th>Title</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {(pack.artifacts || []).map((a) => (
-            <tr key={a.id}>
-              <td>
-                {a.type} {a.is_input ? "(in)" : "(out)"}
-              </td>
-              <td>
-                {a.title}
-                {a.json ? <pre>{JSON.stringify(a.json, null, 2).slice(0, 1200)}</pre> : null}
-              </td>
-              <td>
-                {a.has_file && (a.type !== "tally_xml" || pack.status === "approved") ? (
-                  <button
-                    className="btn secondary"
-                    type="button"
-                    onClick={async () => {
-                      const token = getToken();
-                      const res = await fetch(`${apiUrl()}/api/workpacks/${pack.id}/files/${a.id}`, {
-                        headers: { Authorization: `Bearer ${token}` },
-                      });
-                      const blob = await res.blob();
-                      const url = URL.createObjectURL(blob);
-                      const link = document.createElement("a");
-                      link.href = url;
-                      link.download = a.type === "tally_xml" ? "tally_import.xml" : a.title;
-                      link.click();
-                    }}
-                  >
-                    {a.type === "tally_xml" ? "Download for Tally" : "Download"}
-                  </button>
-                ) : null}
-                {a.type === "tally_xml" && pack.status !== "approved" ? (
-                  <span className="muted">Waiting for Partner approval</span>
-                ) : null}
-              </td>
-            </tr>
-          ))}
-          {!(pack.artifacts || []).length ? (
-            <tr>
-              <td colSpan={3} className="muted">
-                No outputs yet.
-              </td>
-            </tr>
-          ) : null}
-        </tbody>
-      </table>
+      <h2>Uploaded files</h2>
+      {uploaded.length ? (
+        uploaded.map((a) => (
+          <ArtifactView key={a.id} artifact={a} pack={pack} onDownload={download} onExcel={downloadExcel} />
+        ))
+      ) : (
+        <p className="muted">No files yet.</p>
+      )}
+      <h2>Working</h2>
+      {outputs.length ? (
+        outputs.map((a) => (
+          <ArtifactView key={a.id} artifact={a} pack={pack} onDownload={download} onExcel={downloadExcel} />
+        ))
+      ) : (
+        <p className="muted">No working yet.</p>
+      )}
     </Shell>
   );
 }

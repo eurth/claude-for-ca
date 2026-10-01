@@ -20,7 +20,7 @@ def _header(c, title):
     c.drawString(20 * mm, 274 * mm, "Test document — not a real tax invoice / statement")
 
 
-def write_invoice(path, *, inv_no, date, vendor, vgstin, buyer, bgstin, rows, igst=False):
+def write_invoice(path, *, inv_no, date, vendor, vgstin, buyer, bgstin, rows, igst=False, vendor_state="Andhra Pradesh"):
     c = canvas.Canvas(str(path), pagesize=A4)
     _header(c, "TAX INVOICE")
     y = 262
@@ -30,7 +30,7 @@ def write_invoice(path, *, inv_no, date, vendor, vgstin, buyer, bgstin, rows, ig
     y -= 6
     c.drawString(20 * mm, y * mm, f"GSTIN: {vgstin}")
     y -= 6
-    c.drawString(20 * mm, y * mm, "Andhra Pradesh")
+    c.drawString(20 * mm, y * mm, vendor_state)
     y -= 10
     c.setFont("Times-Bold", 10)
     c.drawString(20 * mm, y * mm, f"Invoice No: {inv_no}     Date: {date}")
@@ -133,6 +133,7 @@ def main():
         buyer=buyer,
         bgstin=bgstin,
         igst=True,
+        vendor_state="Karnataka",
         rows=[
             ("1905", "Tea and grocery", 20, 250.00, 5000.00, 0.00, 0.00, 900.00, 5900.00),
         ],

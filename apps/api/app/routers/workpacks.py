@@ -35,7 +35,7 @@ def _pack_out(db: Session, p: Workpack) -> dict:
                 "has_file": bool(a.path),
                 "json": a.json_data,
             }
-            for a in arts
+            for a in sorted(arts, key=lambda a: (not a.is_input, a.created_at or 0))
         ],
         "messages": [{"role": m.role, "content": m.content} for m in msgs],
         "approvals": [
@@ -186,3 +186,28 @@ def download_artifact(
     if art.artifact_type == "tally_xml" and pack.status != "approved":
         raise HTTPException(403, "Partner must approve this file before download")
     return FileResponse(art.path, filename=art.title.replace(" ", "_") + (".xml" if art.artifact_type == "tally_xml" else ""))
+
+
+@router.get("/{pack_id}/xlsx/{artifact_id}")
+def download_xlsx(
+    pack_id: UUID,
+    artifact_id: UUID,
+    user: User = Depends(current_user),
+    db: Session = Depends(get_db),
+):
+    from fastapi.responses import FileResponse
+
+    from app.workbook import json_table_xlsx
+
+    pack = db.get(Workpack, pack_id)
+    art = db.get(Artifact, artifact_id)
+    if not pack or not art or pack.firm_id != user.firm_id or art.workpack_id != pack.id:
+        raise HTTPException(404, "File not found")
+    if art.artifact_type == "tally_xml" and pack.status != "approved":
+        raise HTTPException(403, "Partner must approve this file before download")
+    if art.path and str(art.path).endswith(".xlsx"):
+        return FileResponse(art.path, filename=art.title.replace(" ", "_"))
+    dest = settings.data_dir / str(pack.firm_id) / str(pack.id) / f"{art.id}.xlsx"
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    json_table_xlsx(dest, art.title or art.artifact_type, art.json_data or {})
+    return FileResponse(dest, filename=(art.title or art.artifact_type).replace(" ", "_") + ".xlsx")

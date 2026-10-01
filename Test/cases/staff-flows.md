@@ -8,17 +8,17 @@ Open `/login`, sign in as Partner. Home shows firm **Gorantla Associates**.
 
 ## TC-02 Extract invoices
 
-1. Work → Extract invoices → Start job.
-2. Upload `samples/invoices/INV-ST-1042-Sharma-Traders.pdf`.
-3. Run again.
-4. Expect a purchase register (or similar JSON) mentioning Sharma Traders, invoice ST/1042, taxable ~10000, CGST/SGST 900, total 11800.
-5. Optional: also upload `INV-RK-88` (IGST) and `INV-ST-1042-duplicate` — exception list should flag the duplicate number.
+1. Work → Extract invoices (do **not** wait for an auto-run).
+2. Upload `samples/invoices/INV-ST-1042-Sharma-Traders.pdf` (you can multi-select RK/88 and the duplicate).
+3. Run job.
+4. Expect a **purchase register table** with Sharma Traders, ST/1042, taxable 10000, CGST/SGST 900, total 11800. Ravi Kirana RK/88 shows IGST 900. Duplicate ST/1042 is listed under Exceptions.
+5. Run again after more uploads: empty `{ "rows": [] }` blocks must **not** pile up — only the latest working.
 
 ## TC-03 Bank statement
 
-1. Work → Process bank statement → Start job.
-2. Upload `samples/bank/HDFC-50200011223344-Apr-2026.pdf`.
-3. Expect a ledger with multiple April 2026 rows and unmatched UPI/cash notes.
+1. Work → Process bank statement.
+2. Upload `samples/bank/HDFC-50200011223344-Apr-2026.pdf`, then Run.
+3. Expect a ledger **table** with 12 April 2026 rows and unmatched UPI/cash notes. Empty ledgers from earlier runs should not remain.
 
 ## TC-04 GSTR-3B (reuses purchase register)
 
