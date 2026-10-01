@@ -1,0 +1,14 @@
+.git
+.gitignore
+**/__pycache__
+**/*.pyc
+.env
+data
+node_modules
+apps/web/.next
+apps/web/out
+docs
+README.md
+*.md
+!packs/**/*.md
+!coolify.env.example

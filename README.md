@@ -17,6 +17,26 @@ A complete AI assistant toolkit for Indian CA firms — covering GST, Income Tax
 
 This repository was built for and with **CA Butchi Babu's team at Gorantla Associates** and is now open to the entire CA community.
 
+## Web app (for-ca)
+
+The staff product lives in `apps/` (FastAPI + Next.js). Firm users sign in and run named jobs (Extract invoices, Review GSTR-3B, …) without seeing models or prompts. Product docs: [`docs/`](docs/README.md).
+
+**Local run**
+
+```bash
+pip install -r apps/api/requirements.txt
+# from repo root
+set PYTHONPATH=apps/api
+set PACKS_DIR=packs
+uvicorn app.main:app --app-dir apps/api --reload --port 8000
+
+cd apps/web && npm install && npm run dev
+```
+
+Open http://localhost:3000 — seed Partner `partner@gorantla.local` / `changeme` (also `manager@` and `intern@` with the same password).
+
+**Coolify:** [`docs/infra/EURTHTECH_DEPLOYMENT_GUIDE.md`](docs/infra/EURTHTECH_DEPLOYMENT_GUIDE.md) · compose file `docker-compose.yml` · planned host `https://ca.eurthtech.com`.
+
 ---
 
 ## ⚡ Start Here — Get Running in 30 Minutes (No Technical Skills Needed)

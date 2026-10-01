@@ -1,0 +1,55 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: forca
+      POSTGRES_PASSWORD: forca
+      POSTGRES_DB: forca
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U forca"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg://forca:forca@db:5432/forca
+      JWT_SECRET: ${JWT_SECRET:-dev-only-change-me}
+      DATA_DIR: /app/data
+      PACKS_DIR: /app/packs
+      WEB_ORIGIN: ${WEB_ORIGIN:-http://localhost:3000}
+      LLM_PROVIDER: ${LLM_PROVIDER:-openrouter}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      SEED_PARTNER_EMAIL: ${SEED_PARTNER_EMAIL:-partner@gorantla.local}
+      SEED_PARTNER_PASSWORD: ${SEED_PARTNER_PASSWORD:-changeme}
+    volumes:
+      - ca_files:/app/data
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./apps/web
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
+
+volumes:
+  pgdata:
+  ca_files:
